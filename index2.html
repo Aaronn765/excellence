@@ -1,0 +1,573 @@
+﻿<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excellence Télécom et Services</title>
+    
+    <!-- Intégration de Tailwind CSS pour un design moderne et responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration des couleurs basées sur votre logo -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#004aa8', /* Bleu du logo */
+                            green: '#8cc63f', /* Vert du logo */
+                            dark: '#0f172a',
+                            light: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Animations personnalisées */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-pattern {
+            background-color: #053f8a;
+            background-image: radial-gradient(circle at center, #005bb5 0%, #002855 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Effet de particules en arrière-plan (Simulé avec CSS) */
+        .hero-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(140, 198, 63, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .service-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-bottom-color: #8cc63f;
+        }
+
+        /* Styling de la scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #004aa8; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #003377; }
+
+        /* Nouvelles animations et motifs pro */
+        .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; position: relative; }
+        .marquee-content { display: inline-block; animation: marquee 35s linear infinite; }
+        .marquee-content:hover { animation-play-state: paused; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        .blob { position: absolute; filter: blur(60px); z-index: 0; opacity: 0.4; animation: float 10s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
+
+        .fiber-line { position: absolute; bottom: 0; left: 0; height: 4px; background: #8cc63f; width: 0; transition: width 0.4s ease; box-shadow: 0 0 10px #8cc63f, 0 0 20px #8cc63f; }
+        .service-card:hover .fiber-line { width: 100%; }
+        
+        /* Icônes de services qui "flottent" au survol */
+        .service-icon-wrap { transition: all 0.3s ease; }
+        .service-card:hover .service-icon-wrap { transform: scale(1.1) rotate(5deg); }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-brand-light antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0 flex items-center gap-3">
+                        <!-- Utilisation de image logo.png -->
+                        <img class="h-16 w-auto object-contain" src="logo.png" alt="Logo Excellence Télécom" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <span style="display: none;" class="font-bold text-xl text-brand-blue tracking-tight">Excellence <span class="text-brand-green">Télécom</span></span>
+                    </a>
+                </div>
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#accueil" class="text-gray-600 hover:text-brand-blue font-semibold transition-colors">Accueil</a>
+                    <a href="#apropos" class="text-gray-600 hover:text-brand-blue font-semibold transition-colors">À Propos</a>
+                    <a href="#services" class="text-gray-600 hover:text-brand-blue font-semibold transition-colors">Nos Services</a>
+                    <a href="#zones" class="text-gray-600 hover:text-brand-blue font-semibold transition-colors">Couverture</a>
+                    <a href="#contact" class="bg-brand-green text-white px-6 py-2.5 rounded-full font-bold hover:bg-opacity-90 transition-all transform hover:scale-105 shadow-lg shadow-brand-green/30">Contactez-nous</a>
+                </div>
+                <!-- Bouton Menu Mobile -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-blue focus:outline-none p-2">
+                        <i data-lucide="menu" class="h-8 w-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#accueil" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-blue hover:bg-gray-50 rounded-md">Accueil</a>
+                <a href="#apropos" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-blue hover:bg-gray-50 rounded-md">À Propos</a>
+                <a href="#services" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-blue hover:bg-gray-50 rounded-md">Nos Services</a>
+                <a href="#zones" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-blue hover:bg-gray-50 rounded-md">Couverture</a>
+                <a href="#contact" class="block px-3 py-2 text-base font-medium text-brand-green font-bold">Contactez-nous</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- En-tête (Hero Section) -->
+    <section id="accueil" class="hero-pattern min-h-screen flex items-center relative pt-20">
+        <!-- Canvas pour l'animation de réseau (particules) -->
+        <canvas id="networkCanvas" class="absolute inset-0 z-0 opacity-60"></canvas>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row items-center pb-20">
+            <div class="md:w-1/3 mb-10 md:mb-0 reveal">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+                    Déployons ensemble le <span class="text-brand-green">Réseau de Demain</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed">
+                    Experts en déploiement d'infrastructures de télécommunication et de fibre optique FTTH GPON. L'excellence au service de votre connectivité très haut débit.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="#services" class="bg-brand-green text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-brand-green transition-all shadow-lg shadow-brand-green/20 flex items-center justify-center gap-2">
+                        Découvrir nos services <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#contact" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-brand-blue transition-all flex items-center justify-center">
+                        Nous contacter
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-2/3 flex justify-center reveal" style="transition-delay: 200ms;">
+                <img src="logo.png" alt="Excellence T&eacute;l&eacute;com et Services" class="w-full max-w-none h-auto object-contain" loading="eager" decoding="async">
+            </div>
+        </div>
+
+        <!-- Vague décorative en bas du Hero -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+            <svg class="relative block w-full h-16 md:h-24" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,123.15,196.48,115.2,238.92,109.91,280.9,94.1,321.39,56.44Z" fill="#ffffff"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Section À Propos -->
+    <section id="apropos" class="py-24 bg-white relative overflow-hidden">
+        <!-- Motifs d'arrière-plan (Blobs flottants) -->
+        <div class="blob bg-brand-green/20 w-96 h-96 rounded-full top-10 -left-20"></div>
+        <div class="blob bg-brand-blue/10 w-80 h-80 rounded-full bottom-10 -right-20" style="animation-delay: 2s;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-3xl font-bold text-brand-blue mb-4">Qui sommes-nous ?</h2>
+                <div class="h-1 w-20 bg-brand-green mx-auto rounded-full mb-8 relative overflow-hidden"><div class="absolute inset-0 bg-white/30 w-1/2 transform -skew-x-12 animate-[marquee_2s_infinite]"></div></div>
+                <p class="text-gray-600 text-lg">
+                    Créée en 2020, Excellence Télécom et Services est née d'une véritable passion pour le déploiement des infrastructures de télécommunication.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center reveal">
+                <div class="p-6 bg-brand-light rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-16 h-16 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto mb-6 text-brand-blue">
+                        <i data-lucide="users" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Équipe Experte</h3>
+                    <p class="text-gray-600">Un personnel expérimenté, motivé et doté de fortes compétences terrain pour garantir la qualité de vos installations.</p>
+                </div>
+                <div class="p-6 bg-brand-light rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-green/5 to-transparent z-0"></div>
+                    <div class="w-16 h-16 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-6 text-brand-green relative z-10">
+                        <i data-lucide="target" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 relative z-10">Notre Objectif</h3>
+                    <p class="text-gray-600 relative z-10">Déployer le réseau d'accès fibre dans les différents locaux fixes tout en offrant une connexion haut débit fiable et pérenne.</p>
+                </div>
+                <div class="p-6 bg-brand-light rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-16 h-16 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto mb-6 text-brand-blue">
+                        <i data-lucide="laptop" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Technologies Avancées</h3>
+                    <p class="text-gray-600">Utilisation d'outils professionnels : AutoCAD Map, Google Earth, Global Mapper pour l'ingénierie et Nperf pour les tests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Services -->
+    <section id="services" class="py-24 bg-brand-light border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl font-bold text-brand-blue mb-4">Nos Expertises & Services</h2>
+                <div class="h-1 w-20 bg-brand-green mx-auto rounded-full mb-8 relative overflow-hidden"><div class="absolute inset-0 bg-white/30 w-1/2 transform -skew-x-12 animate-[marquee_2s_infinite]"></div></div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Des solutions complètes pour palier aux problèmes d'accès au réseau et améliorer votre Qualité de Service (QoS).</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg border-b-4 border-transparent reveal relative overflow-hidden group">
+                    <div class="service-icon-wrap text-brand-green mb-6 bg-brand-green/10 w-14 h-14 flex items-center justify-center rounded-xl">
+                        <i data-lucide="network" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">Infrastructure Fibre Optique</h3>
+                    <p class="text-gray-600">Déploiement complet d'infrastructures de réseau fibre optique (FTTH, GPON) de l'étude à la réalisation.</p>
+                    <div class="fiber-line"></div>
+                </div>
+                <!-- Service 2 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg border-b-4 border-transparent reveal relative overflow-hidden group" style="transition-delay: 100ms;">
+                    <div class="service-icon-wrap text-brand-blue mb-6 bg-brand-blue/10 w-14 h-14 flex items-center justify-center rounded-xl">
+                        <i data-lucide="server" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">Équipement Fibre Optique</h3>
+                    <p class="text-gray-600">Installation et configuration des équipements réseaux nécessaires pour un signal haut débit optimal.</p>
+                    <div class="fiber-line"></div>
+                </div>
+                <!-- Service 3 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg border-b-4 border-transparent reveal relative overflow-hidden group" style="transition-delay: 200ms;">
+                    <div class="service-icon-wrap text-brand-green mb-6 bg-brand-green/10 w-14 h-14 flex items-center justify-center rounded-xl">
+                        <i data-lucide="wrench" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">Maintenance Réseaux</h3>
+                    <p class="text-gray-600">Interventions préventives et curatives pour limiter les pannes récurrentes et garantir la continuité de service.</p>
+                    <div class="fiber-line"></div>
+                </div>
+                <!-- Service 4 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg border-b-4 border-transparent reveal relative overflow-hidden group" style="transition-delay: 300ms;">
+                    <div class="service-icon-wrap text-brand-blue mb-6 bg-brand-blue/10 w-14 h-14 flex items-center justify-center rounded-xl">
+                        <i data-lucide="wifi" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">Réseaux Informatiques</h3>
+                    <p class="text-gray-600">Conception, câblage et paramétrage de réseaux informatiques performants pour les entreprises.</p>
+                    <div class="fiber-line"></div>
+                </div>
+                <!-- Service 5 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg border-b-4 border-transparent reveal relative overflow-hidden group" style="transition-delay: 400ms;">
+                    <div class="service-icon-wrap text-brand-green mb-6 bg-brand-green/10 w-14 h-14 flex items-center justify-center rounded-xl">
+                        <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">Formation & Ingénierie</h3>
+                    <p class="text-gray-600">Audit de vos installations, ingénierie de modélisation (Plan Maps) et encadrement de stagiaires/techniciens.</p>
+                    <div class="fiber-line"></div>
+                </div>
+                <!-- Service 6 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg border-b-4 border-transparent reveal relative overflow-hidden group" style="transition-delay: 500ms;">
+                    <div class="service-icon-wrap text-brand-blue mb-6 bg-brand-blue/10 w-14 h-14 flex items-center justify-center rounded-xl">
+                        <i data-lucide="shopping-cart" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">Vente d'Équipement</h3>
+                    <p class="text-gray-600">Fourniture de matériel spécialisé de haute qualité pour vos projets de fibre optique et télécoms.</p>
+                    <div class="fiber-line"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nouvelle Section Statistiques Animées -->
+    <section class="py-16 bg-white border-b border-gray-100 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:divide-x md:divide-gray-100">
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-extrabold text-brand-blue mb-2"><span class="counter" data-target="2020">0</span></div>
+                    <div class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Année de Création</div>
+                </div>
+                <div class="reveal" style="transition-delay: 100ms;">
+                    <div class="text-4xl lg:text-5xl font-extrabold text-brand-green mb-2"><span class="counter" data-target="15">0</span>+</div>
+                    <div class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Zones Couvertes</div>
+                </div>
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <div class="text-4xl lg:text-5xl font-extrabold text-brand-blue mb-2"><span class="counter" data-target="100">0</span>%</div>
+                    <div class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Fibre GPON FTTH</div>
+                </div>
+                <div class="reveal" style="transition-delay: 300ms;">
+                    <div class="text-4xl lg:text-5xl font-extrabold text-brand-green mb-2"><span class="counter" data-target="24">0</span>/7</div>
+                    <div class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Maintenance QoS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Zone de Couverture -->
+    <section id="zones" class="py-24 bg-brand-blue text-white overflow-hidden relative">
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl"></div>
+        <!-- Vague en haut pour la transition -->
+        <div class="absolute top-0 left-0 w-full overflow-hidden leading-none z-0 transform rotate-180">
+            <svg class="relative block w-full h-10 md:h-16" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,123.15,196.48,115.2,238.92,109.91,280.9,94.1,321.39,56.44Z" fill="#ffffff"></path>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-10">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/3 reveal">
+                    <h2 class="text-3xl font-bold mb-4">Notre Zone de Couverture</h2>
+                    <div class="h-1 w-20 bg-brand-green rounded-full mb-6"></div>
+                    <p class="text-gray-200 mb-6">
+                        Nous intervenons sur une grande partie de la capitale et ses environs pour déployer le réseau fibre optique, zone par zone (plaques).
+                    </p>
+                    <div class="flex items-center gap-3 text-brand-green font-bold">
+                        <i data-lucide="map-pin"></i> Ouagadougou et Périphérie
+                    </div>
+                </div>
+                <div class="md:w-2/3 reveal w-full overflow-hidden">
+                    <!-- Animation Marquee Continue pour les zones -->
+                    <div class="marquee-container py-4">
+                        <div class="marquee-content flex gap-4 pr-4">
+                            <!-- Première série -->
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Ouaga 2000</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Cité Azimo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Patte d’oie</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Kalgodé</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Dagnoin</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">1200 Logements</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Dassasgo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Somgandé</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Tampouy</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Tenkodogo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Karpala</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Koubri</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Tingandogo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Ouaga Extension</span>
+                            <!-- Seconde série identique (nécessaire pour l'illusion visuelle de la boucle infinie) -->
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Ouaga 2000</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Cité Azimo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Patte d’oie</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Kalgodé</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Dagnoin</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">1200 Logements</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Dassasgo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Somgandé</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Tampouy</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Tenkodogo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Karpala</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Koubri</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Tingandogo</span>
+                            <span class="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-brand-green transition-colors cursor-default whitespace-nowrap shadow-lg">Ouaga Extension</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact" class="bg-brand-dark text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16 reveal">
+                <!-- Colonne 1 : Logo & About -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-3 mb-6 bg-white p-2 inline-block rounded-lg">
+                        <img class="h-12 w-auto object-contain" src="logo.png" alt="Logo Excellence Télécom" onerror="this.style.display='none';">
+                        <span class="font-bold text-xl text-brand-blue tracking-tight pr-2">Excellence <span class="text-brand-green">Télécom</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-6 max-w-md">
+                        Notre savoir-faire repose sur l'organisation, les compétences terrains, et un personnel expérimenté pour tous vos projets de fibre optique.
+                    </p>
+                </div>
+
+                <!-- Colonne 2 : Coordonnées -->
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-6 border-b border-gray-700 pb-2">Nous Contacter</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-green mt-1 flex-shrink-0"></i>
+                            <span>Avenue des Arts<br>Immeuble pharmacie DUNIA<br>Section TO- Lot 22 - Parcelle 04 - Secteur 23<br>Ouagadougou</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mailbox" class="w-5 h-5 text-brand-green flex-shrink-0"></i>
+                            <span>BP: 02 BP 6195 Ouaga 02</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-white font-bold text-lg mt-4">
+                            <i data-lucide="phone" class="w-5 h-5 text-brand-green flex-shrink-0"></i>
+                            <span>55-57-05-05</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Colonne 3 : Infos Légales -->
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-6 border-b border-gray-700 pb-2">Informations Légales</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><strong>RCCM :</strong> BF OUA 2021 B3838</li>
+                        <li><strong>IFU :</strong> 00155798 F</li>
+                        <li><strong>Régime :</strong> Normal d'Imposition</li>
+                        <li><strong>Domaine :</strong> DME-CII</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm reveal">
+                <p>&copy; 2026 Excellence Télécom et Services. Tous droits réservés.</p>
+                <div class="mt-4 md:mt-0 flex gap-4">
+                    <a href="#" class="hover:text-brand-green transition-colors">Mentions Légales</a>
+                    <a href="#" class="hover:text-brand-green transition-colors">Politique de confidentialité</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts pour l'interactivité -->
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+
+        // Gestion du menu mobile
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Fermer le menu mobile au clic sur un lien
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Animation d'apparition au défilement (Scroll Reveal)
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // La distance avant que l'élément n'apparaisse
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Déclencher une fois au chargement
+        reveal();
+
+        // Effet de réduction de la navbar au scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-0');
+                navbar.classList.remove('py-2');
+            } else {
+                navbar.classList.add('py-2');
+                navbar.classList.remove('py-0');
+            }
+        });
+
+        // Animation de comptage pour les statistiques
+        const counters = document.querySelectorAll('.counter');
+        let hasCounted = false;
+
+        function updateCounters() {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / 50; // Vitesse de l'animation
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(updateCounters, 30);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            const statsSection = document.querySelector('.counter');
+            if (statsSection) {
+                const sectionPos = statsSection.getBoundingClientRect().top;
+                const screenPos = window.innerHeight;
+                if (sectionPos < screenPos && !hasCounted) {
+                    updateCounters();
+                    hasCounted = true;
+                }
+            }
+        });
+
+        // Animation des particules réseau (Canvas)
+        const canvas = document.getElementById('networkCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // Création des particules (nœuds du réseau)
+            for(let i=0; i<40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8
+                });
+            }
+
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    
+                    // Rebond sur les bords
+                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    
+                    // Dessin des points
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(140, 198, 63, 0.6)';
+                    ctx.fill();
+                });
+                
+                // Dessin des lignes (fibre optique) entre les points proches
+                for(let i=0; i<particles.length; i++) {
+                    for(let j=i+1; j<particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let dist = Math.sqrt(dx*dx + dy*dy);
+                        
+                        if(dist < 180) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            // La ligne devient de plus en plus invisible si les points s'éloignent
+                            ctx.strokeStyle = `rgba(140, 198, 63, ${0.4 - dist/450})`;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            animateParticles();
+        }
+    </script>
+</body>
+</html>
